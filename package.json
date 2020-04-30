@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "HPI Schul-Cloud BigBlueButton Recorder",
   "scripts": {
+    "lint": "eslint --ignore-path .gitignore .",
     "start": "node index.js",
     "test": "false"
   },
@@ -15,5 +16,15 @@
   "bugs": {
     "url": "https://github.com/schul-cloud/schulcloud-bbb-recorder/issues"
   },
-  "homepage": "https://github.com/schul-cloud/schulcloud-bbb-recorder#readme"
+  "homepage": "https://github.com/schul-cloud/schulcloud-bbb-recorder#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.8.2",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-simple-import-sort": "^5.0.3",
+    "prettier": "^2.0.5"
+  }
 }

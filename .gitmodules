@@ -1,0 +1,3 @@
+[submodule "bbb-recorder"]
+	path = bbb-recorder
+	url = https://github.com/jibon57/bbb-recorder

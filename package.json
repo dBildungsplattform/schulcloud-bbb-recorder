@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "HPI Schul-Cloud BigBlueButton Recorder",
   "scripts": {
-    "lint": "eslint --ignore-path .gitignore .",
+    "lint": "eslint --ignore-pattern bbb-recorder --ignore-path .gitignore .",
     "start": "node index.js",
     "test": "true"
   },

@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
     "start": "node index.js",
-    "test": "false"
+    "test": "true"
   },
   "repository": {
     "type": "git",

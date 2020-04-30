@@ -1,0 +1,19 @@
+{
+  "name": "schulcloud-bbb-recorder",
+  "version": "1.0.0",
+  "description": "HPI Schul-Cloud BigBlueButton Recorder",
+  "main": "index.js",
+  "scripts": {
+    "test": "false"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schul-cloud/schulcloud-bbb-recorder.git"
+  },
+  "author": "Schul-Cloud Team",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/schul-cloud/schulcloud-bbb-recorder/issues"
+  },
+  "homepage": "https://github.com/schul-cloud/schulcloud-bbb-recorder#readme"
+}

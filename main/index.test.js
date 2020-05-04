@@ -5,6 +5,8 @@ const record = require('./record');
 
 jest.mock('amqplib');
 jest.mock('./record');
+jest.mock('./upload');
+jest.mock('./clean');
 
 const processExit = process.exit;
 const processOn = process.on;

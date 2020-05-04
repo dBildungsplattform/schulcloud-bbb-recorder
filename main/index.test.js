@@ -112,6 +112,8 @@ describe('main', () => {
 
     it.todo('uploads the created videos');
 
+    it.todo('cleans up after a video is uploaded');
+
     it('acknowledges messages on success', async () => {
       const payload = marshal({ url: 'https://…', duration: 12 });
       const message = { id: 'test-success', content: marshal(payload) };

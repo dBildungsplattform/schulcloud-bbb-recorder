@@ -1,6 +1,8 @@
 const amqp = require('amqplib');
 
 const record = require('./record');
+const upload = require('./upload');
+const clean = require('./clean');
 
 function trap(signal, handler, code) {
   process.on(signal, async () => {
@@ -44,14 +46,14 @@ async function main({ AMQP_URI, AMQP_QUEUE }) {
       // TODO: assert `duration` is an integer
       // TODO: assert `url` is a valid HTTP(S) URL
 
-      // eslint-disable-next-line no-unused-vars
       const filepath = await record(payload.url, payload.duration);
 
-      // TODO: upload
-      // TODO: clean-up?
+      await upload(filepath, ''); // TODO: Specify upload destination, auth…
+      await clean(filepath);
 
       await channel.ack(message);
     } catch (_) {
+      // TODO: Log error for observability?
       await channel.nack(message);
     }
   };

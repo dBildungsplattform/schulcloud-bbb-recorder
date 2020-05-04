@@ -44,8 +44,8 @@ async function main({ AMQP_URI, AMQP_QUEUE }) {
       // TODO: assert `duration` is an integer
       // TODO: assert `url` is a valid HTTP(S) URL
 
+      // eslint-disable-next-line no-unused-vars
       const filepath = await record(payload.url, payload.duration);
-      console.debug(filepath);
 
       // TODO: upload
       // TODO: clean-up?

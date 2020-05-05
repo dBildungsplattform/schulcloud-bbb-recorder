@@ -2,6 +2,7 @@ const fs = require('fs');
 const { Readable, Writable } = require('stream');
 
 const got = require('got');
+const jwt = require('jsonwebtoken');
 
 const upload = require('./upload');
 
@@ -50,5 +51,17 @@ describe('upload', () => {
     expect(request.received).toBe(filepath);
   });
 
-  it.todo('sets the authorization header with a signed value');
+  it('sets the authorization header with a signed value', async () => {
+    const url = 'https://schul-cloud/videoconf/…';
+    const secret = 'abcdef1234';
+    const token = jwt.sign(url, secret);
+
+    await upload('…', url, secret);
+
+    expect(got.stream.post).toHaveBeenCalledWith(expect.any(String), {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+  });
 });

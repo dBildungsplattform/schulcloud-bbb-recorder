@@ -2,9 +2,8 @@ const fs = require('fs');
 const stream = require('stream');
 const util = require('util');
 
-const jwt = require('jsonwebtoken');
-
 const got = require('got');
+const jwt = require('jsonwebtoken');
 
 const pipeline = util.promisify(stream.pipeline);
 const jwtSign = util.promisify(jwt.sign);

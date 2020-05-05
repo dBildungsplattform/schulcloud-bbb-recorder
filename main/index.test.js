@@ -1,7 +1,10 @@
 const amqp = require('amqplib');
 
-const main = require('.');
 const record = require('./record');
+const upload = require('./upload');
+const clean = require('./clean');
+
+const main = require('.');
 
 jest.mock('amqplib');
 jest.mock('./record');
@@ -32,8 +35,9 @@ function mock(keys, makeFn = () => jest.fn().mockResolvedValue()) {
 describe('main', () => {
   async function invoke(overrides) {
     return main({
-      AMQP_URI: 'amqp://localhost.test',
+      AMQP_URI: 'amqp://test@localhost',
       AMQP_QUEUE: 'test-queue',
+      UPLOAD_URI: 'https://localhost/api/:vid/recordings',
       ...overrides,
     });
   }
@@ -55,6 +59,8 @@ describe('main', () => {
   afterEach(() => {
     amqp.connect.mockReset();
     record.mockReset();
+    upload.mockReset();
+    clean.mockReset();
     restoreProcess();
   });
 
@@ -95,13 +101,19 @@ describe('main', () => {
   });
 
   describe('message handler', () => {
-    async function handle(message) {
-      await invoke({}); // invoke "main" to perform setup
+    async function handle(message, env = {}) {
+      await invoke(env); // invoke "main" to perform setup
       const [[, handler]] = channel.consume.mock.calls;
       return handler(message);
     }
 
-    function marshal(payload) {
+    function marshal(overrides) {
+      const defaults = {
+        url: 'https://bbb/playback?test',
+        duration: 10,
+        vid: '42',
+      };
+      const payload = { ...defaults, ...overrides };
       return Buffer.from(JSON.stringify(payload));
     }
 
@@ -112,13 +124,30 @@ describe('main', () => {
       expect(record).toHaveBeenCalledWith(url, duration);
     });
 
-    it.todo('uploads the created videos');
+    it('uploads the created videos', async () => {
+      const filepath = '/tmp/wants-to-be-uploaded.webm';
+      const env = {
+        UPLOAD_URI: 'https://localhost/api/:vid/recordings',
+        UPLOAD_SECRET: 'test-secret',
+      };
+      record.mockResolvedValue(filepath);
+      await handle({ content: marshal({ vid: '1234' }) }, env);
+      expect(upload).toHaveBeenCalledWith(
+        filepath,
+        'https://localhost/api/1234/recordings',
+        env.UPLOAD_SECRET
+      );
+    });
 
-    it.todo('cleans up after a video is uploaded');
+    it('cleans up after a video is uploaded', async () => {
+      const filepath = '/tmp/needs-cleaning.webm';
+      record.mockResolvedValue(filepath);
+      await handle({ content: marshal({}) });
+      expect(clean).toHaveBeenCalledWith(filepath);
+    });
 
     it('acknowledges messages on success', async () => {
-      const payload = marshal({ url: 'https://…', duration: 12 });
-      const message = { id: 'test-success', content: marshal(payload) };
+      const message = { id: 'test-success', content: marshal({}) };
       await handle(message);
       expect(channel.ack).toHaveBeenCalledWith(message);
     });

@@ -14,7 +14,7 @@ function trap(signal, handler, code) {
   });
 }
 
-async function main({ AMQP_URI, AMQP_QUEUE }) {
+async function main({ AMQP_URI, AMQP_QUEUE, UPLOAD_URI, UPLOAD_SECRET }) {
   // Connect to the queue.
   const connection = await amqp.connect(AMQP_URI);
   const channel = await connection.createChannel();
@@ -41,14 +41,16 @@ async function main({ AMQP_URI, AMQP_QUEUE }) {
   // Process each individual message.
   const handle = async (message) => {
     try {
-      const payload = JSON.parse(message.content.toString());
+      const { duration, url, vid } = JSON.parse(message.content.toString());
 
       // TODO: assert `duration` is an integer
       // TODO: assert `url` is a valid HTTP(S) URL
 
-      const filepath = await record(payload.url, payload.duration);
+      const filepath = await record(url, duration);
 
-      await upload(filepath, ''); // TODO: Specify upload destination, auth…
+      const endpoint = UPLOAD_URI.replace(':vid', vid);
+
+      await upload(filepath, endpoint, UPLOAD_SECRET);
       await clean(filepath);
 
       await channel.ack(message);

@@ -2,6 +2,8 @@
 
 Export [BigBlueButton](https://github.com/bigbluebutton/bigbluebutton) recordings from the [HPI Schul-Cloud](https://github.com/schul-cloud) to video.
 
+![architecture](./architecture.png)
+
 ## Getting started
 
 1. Clone this repository.

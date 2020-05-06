@@ -15,7 +15,7 @@ function trap(signal, handler, code) {
 }
 
 async function main({ AMQP_URI, AMQP_QUEUE, UPLOAD_URI, UPLOAD_SECRET }) {
-  // Connect to the queue.
+  // Connect to the message broker.
   const connection = await amqp.connect(AMQP_URI);
   const channel = await connection.createChannel();
 
@@ -43,13 +43,9 @@ async function main({ AMQP_URI, AMQP_QUEUE, UPLOAD_URI, UPLOAD_SECRET }) {
     try {
       const { duration, url, vid } = JSON.parse(message.content.toString());
 
-      // TODO: assert `duration` is an integer
-      // TODO: assert `url` is a valid HTTP(S) URL
-
       const filepath = await record(url, duration);
 
       const endpoint = UPLOAD_URI.replace(':vid', vid);
-
       await upload(filepath, endpoint, UPLOAD_SECRET);
       await clean(filepath);
 

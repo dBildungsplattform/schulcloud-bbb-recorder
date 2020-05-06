@@ -2,6 +2,10 @@
 
 Export [BigBlueButton](https://github.com/bigbluebutton/bigbluebutton) recordings from the [HPI Schul-Cloud](https://github.com/schul-cloud) to video.
 
+![architecture](./architecture.png)
+
+BigBlueButton recordings are composed of different media streams – audio, webcams, screenshare, slides… – that need to be played in sync. To make it easier to archive a recorded web conference, this projects combines the captured media streams into a single video.
+
 ## Getting started
 
 1. Clone this repository.

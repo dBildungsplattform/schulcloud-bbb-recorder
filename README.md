@@ -43,4 +43,12 @@ docker-compose --file docker-compose.example.yml build
 docker-compose --file docker-compose.example.yml up
 ```
 
+## Hints
+
+### Waiting on other services
+
 The image includes the [`dockerize`](https://github.com/jwilder/dockerize) utility in case you have to wait for the message broker or upload endpoint to become available before starting to process jobs.
+
+### Manually trigger the service in development
+
+If you have a BigBlueButton playback URL and you want to trigger the recorder service directly, check out [`script/send`](./script/send). It allows you to push properly encoded messages to the broker and should also give you an idea of how to use the recorder from other projects.

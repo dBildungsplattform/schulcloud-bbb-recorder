@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+
+// Usage: script/send [uri] [duration] [vid]
+//
+// Example:
+//
+//   export AMQP_URI='amqp://guest:guest@localhost:5672'
+//   export AMQP_QUEUE='schulcloud-bbb-recording-conversion'
+//   script/send 'https://…/playback.html?meetingId=…' 5 'abcdef'
+
+const amqp = require('amqplib');
+
+const { AMQP_URI, AMQP_QUEUE } = process.env;
+
+(async function main() {
+  const [url, duration, vid] = process.argv.slice(2);
+
+  // Connect to the message broker.
+  const connection = await amqp.connect(AMQP_URI);
+  const channel = await connection.createChannel();
+
+  const payload = { url, duration: Number.parseInt(duration, 10), vid };
+
+  // Send a message to the queue.
+  const buffer = Buffer.from(JSON.stringify(payload));
+  await channel.sendToQueue(AMQP_QUEUE, buffer, { persistent: true });
+
+  // Clean up.
+  await channel.close();
+  await connection.close();
+})();

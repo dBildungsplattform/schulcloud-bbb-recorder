@@ -1,0 +1,19 @@
+---
+version: "3.7"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.8.3-alpine
+    ports:
+      - "5672:5672"
+
+  recorder:
+    build: .
+    command: ["sh", "-c", "dockerize -timeout 30s -wait tcp://rabbitmq:5672 && node index.js"]
+    environment:
+      - AMQP_URI=amqp://guest:guest@rabbitmq:5672
+      - AMQP_QUEUE=schulcloud-bbb-recording-conversion
+      - UPLOAD_URI=http://…:3030/videoconference/:vid/recordings
+      - UPLOAD_SECRET=…
+    depends_on:
+      - rabbitmq

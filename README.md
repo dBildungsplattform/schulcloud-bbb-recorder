@@ -1,5 +1,7 @@
 # Schul-Cloud BigBlueButton Recorder
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/schul-cloud/schulcloud-bbb-recorder.svg)](https://greenkeeper.io/)
+
 Export [BigBlueButton](https://github.com/bigbluebutton/bigbluebutton) recordings from the [HPI Schul-Cloud](https://github.com/schul-cloud) to video.
 
 ![architecture](./architecture.png)
